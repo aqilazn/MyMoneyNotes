@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.room.*
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.etsppb.ui.theme.ETSPPBTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -118,6 +119,7 @@ val expenseCategories = listOf("Makanan", "Transportasi", "Belanja", "Tagihan", 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val db = AppDatabase.getDatabase(this)
@@ -541,8 +543,11 @@ fun TransactionCard(transaction: Transaction, onClick: () -> Unit) {
     ) {
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(modifier = Modifier.size(48.dp).clip(RoundedCornerShape(12.dp)).background(if(isIncome) GreenLight else RedLight), contentAlignment = Alignment.Center) {
-                Icon(if (isIncome) Icons.Default.ArrowUpward else Icons.Default.ArrowDownward, null, tint = if(isIncome) GreenIncome else RedExpense)
-            }
+                Icon(
+                    imageVector = if (isIncome) Icons.Default.ArrowDownward else Icons.Default.ArrowUpward, // <--- TUKAR DI SINI
+                    contentDescription = null,
+                    tint = if (isIncome) GreenIncome else RedExpense
+                )            }
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(transaction.title, fontWeight = FontWeight.Bold, color = TextPrimary)
